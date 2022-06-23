@@ -2,8 +2,11 @@
 layout: post
 title: "在 GitHub 上创建博客"
 author: "Juewen Peng"
-tags: Tutorial
+comments: false
+tags: [Tutorial, GitHub, Tale, Jekyll]
 excerpt_separator: <!--more-->
+sticky: false
+hidden: false
 ---
 
 本文详细介绍了如何在 GitHub 上创建博客，应用 Jekyll 主题，以及在本地调试。<!--more--> 
@@ -98,7 +101,7 @@ $ jekyll serve
 <br>
 
 ## 5. 修改主题
-进入 `_config.yml` 文件，将相关信息修改为自己的。记得将 `baseurl` 修改为自己的仓库子目录，本文中将其修改为 `"/blog"`。若创建仓库时采用第一种直接用户名的方式，此处修改为空字符串 `""`。重新开启 Jekyll 服务，并打开 [http://127.0.0.1:4000](http://127.0.0.1:4000)，查看主题样式。
+进入 `_config.yml` 文件，将相关信息修改为自己的。注意，若仓库名采用第一种**用户名+固定后缀**的方式，将 `baseurl` 改为空字符串 `""`；若采用第二种**任意名称**的方式，将 `baseurl` 改为仓库名，如本文应将其修改为 `"/blog"`。修改完相关信息后，按照上一小节的最后一步重新开启 Jekyll 服务，并打开网页 [http://127.0.0.1:4000](http://127.0.0.1:4000)，查看主题样式。
 
 <br>
 
