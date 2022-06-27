@@ -117,7 +117,7 @@ $$
 ![image]({{site.baseurl}}/images/image-2022-06-26-22-25-25.png){:width="90%"}
 <div class="figcap">图 4：diffusion model 的三种等价参数化形式</div>
 
-其中，$$x_\theta$$ 是『去噪模型』，$$\epsilon_\theta$$ 是『噪声估计模型』（DDPM 用的就是这种参数化方法），$$s_\theta$$ 是『分数模型』。除了这篇论文，CVPR 2022 关于 diffusion model 的 [tutorial]({{site.baseurl}}/files/Diffusion_Models_tutorial_CVPR2022.pdf) 中 Part 2 部分也证明了 DDPM 这种『噪声估计模型』与『分数模型』的损失函数是完全等价的。
+其中，$$x_\theta$$ 是『去噪模型』，$$\epsilon_\theta$$ 是『噪声估计模型』（DDPM 用的就是这种参数化方法），$$s_\theta$$ 是『分数模型』。除了这篇论文，CVPR 2022 关于 diffusion model 的 [tutorial](https://drive.google.com/file/d/1noQ2d4-nzSh3Yp3-mOOYN8YGJoSa4pmz/view) 中 Part 2 部分也证明了 DDPM 这种『噪声估计模型』与『分数模型』的损失函数是完全等价的。
 
 <br>
 
