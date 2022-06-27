@@ -11,7 +11,8 @@ body {
 }
 
 html {
-  font-family: $serif-primary;
+  // font-family: $serif-primary;
+  font-family: $sans-serif;
   font-size: 14px;
   overflow-y: scroll;
 
@@ -63,4 +64,20 @@ img {
 
 td {
   vertical-align: top;
+}
+
+.figcap {
+  color: #C0C0C0;
+  text-decoration: underline;
+  font-size: 15px;
+  font-family: $sans-serif;
+  text-align: center;
+  // transform: translateY(-5px);
+  padding-bottom: 30px;
+  a {
+    color: #C0C0C0;
+  }
+  a:hover {
+    color: #4a9ae1;
+  }
 }

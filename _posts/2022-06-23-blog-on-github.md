@@ -7,6 +7,7 @@ tags: [Tutorial, GitHub, Tale, Jekyll]
 excerpt_separator: <!--more-->
 sticky: false
 hidden: false
+katex: true
 ---
 
 <!-- "highlight language" refer to https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers -->
@@ -14,6 +15,10 @@ hidden: false
 本文详细介绍了如何在 GitHub 上创建博客，应用 Jekyll 主题，以及在本地调试。<!--more--> 
 
 主要参考 [https://www.cnblogs.com/sqchen/p/10757927.html](https://www.cnblogs.com/sqchen/p/10757927.html)。
+
+**2022/06/27 更新**：增加新章节 “KaTeX 加速 LaTeX 公式渲染”
+
+---
 
 <br>
 
@@ -117,8 +122,42 @@ yyyy-MM-dd-filename.md
 
 将编辑好的 md 文件 push 到远程仓库，完成更新。
 
+<br>
+
+## 7. KaTeX 加速 LaTeX 公式渲染
+Jekyll 默认使用 MathJax 来渲染公式，当界面公式较多时，页面加载会变慢。KaTeX 是一个支持在网页上显示 LaTeX 公式的 JavaScript 库，相较于 MathJax，KaTeX 渲染速度要快得多，可以通过 [KaTeX and MathJax Comparison Demo](http://www.intmath.com/cg5/KaTeX-mathjax-comparison.php) 比较一下两者的渲染速度。
+
+具体的操作配置流程见 [How to LaTeX in Jekyll using KaTeX](https://www.xuningyang.com/blog/2021-01-11-katex-with-jekyll/)
+
+若要在本地 Jekyll 环境上跑，在上述链接的 Step 2 中需要执行 Method 2。
+
+原文中写到下面三个包只要安装一个就行，本人推荐安装第三个（第一个包安装不上，第二个包后续开启 Jekyll 服务报错）。
 {% highlight shell %}
-$ git add .
-$ git commit -m "upload"
-$ git push origin master
+$ gem install therubyracer
+$ gem install therubyrhino
+$ gem install duktape (recommend)
 {% endhighlight %}
+
+另外，我们还需要通过下面的命令将安装的包手动添加到本地环境：
+{% highlight shell %}
+$ bundle add kramdown-math-katex
+$ bundle add katex
+$ bundle add execjs
+$ bundle add duktape
+{% endhighlight %}
+
+测试（注意格式与 LaTeX 稍有不同）：
+
+{% highlight markdown %}
+行内公式: $$f(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2 \pi i \xi x} \,d\xi$$
+
+行间公式:
+
+$$f(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2 \pi i \xi x} \,d\xi$$
+{% endhighlight %}
+
+行内公式: $$f(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2 \pi i \xi x} \,d\xi$$
+
+行间公式:
+
+$$f(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2 \pi i \xi x} \,d\xi$$
