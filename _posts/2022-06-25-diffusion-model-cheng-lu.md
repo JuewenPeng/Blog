@@ -3,7 +3,7 @@ layout: post
 title: "Diffusion Model 最近在图像生成领域大红大紫，如何看待它的风头开始超过 GAN？"
 author: "Juewen Peng"
 comments: false
-tags: [Diffusion Model, Score Function, GAN, VAE, Normalizing Flow, Autoregressive Model]
+tags: [Diffusion Model, Score Function, GAN, VAE, Normalizing Flow, Autoregressive Model, Generative Model]
 excerpt_separator: <!--more-->
 sticky: false
 hidden: false
@@ -36,8 +36,8 @@ katex: true
 ![image]({{site.baseurl}}/images/image-2022-06-26-00-11-32.png){:width="90%"}
 <div class="figcap">图 1：generative model 概述（<a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">https://lilianweng.github.io/posts/2021-07-11-diffusion-models/</a>）</div>
 
-varitional auto-encoder（VAE）首先定义了一个隐变量 $$z$$ 满足 $$p(z)=\mathcal{N}(0,I)$$，
-接着定义一个条件分布 $$p_\theta(x\vert z)$$（一般参数化成高斯分布或伯努利分布），从而定义了 $$z$$ 和 $$x$$ 的联合分布。当训练好模型后，生成数据 $$x$$ 只需要按照 “祖先采样”（ancestral sampling）的方法：首先采样 $$z\sim p(z)$$，再根据得到的 $$z$$ 来采样 $$x\sim p_\theta(x\vert z)$$，即我们可以把 $$p_\theta(x\vert z)$$ 理解成 “生成器”，把标准高斯噪声 $$z$$ 通过某种 “随机映射” 映射到原始图像的数据分布 $$x$$ 上。
+Varitional auto-encoder（VAE）首先定义了一个隐变量 $$z$$ 满足 $$p(z)=\mathcal{N}(0,I)$$，
+接着定义一个条件分布 $$p_\theta(x\vert z)$$（一般参数化成高斯分布或伯努利分布），从而定义了 $$z$$ 和 $$x$$ 的联合分布。当训练好模型后，生成数据 $$x$$ 只需要按照 “祖先采样”（ancestral sampling）的方法：首先采样 $$z\sim p(z)$$，再根据得到的 $$z$$ 来采样 $$x\sim p_\theta(x\vert z)$$，即我们可以把 $$p_\theta(x\vert z)$$ 理解成 “生成器”，把标准高斯噪声 $$z$$ 通过某种 “随机映射” 到原始图像的数据分布 $$x$$ 上。
 
 训练 VAE 通常基于最大似然，即 $$\max_\theta{\,\log{p_\theta(x)}}$$。根据贝叶斯公式，我们可以得到 $$\log{p_\theta(x)}=\log{p_\theta(x\vert z)}+\log{p(z)}-\log{p_\theta(z\vert x)}$$，然而，$$\log{p_\theta(x)}$$ 的计算是 intractable 的（因为真实后验 $$\log{p_\theta(z\vert x)}$$ 无法计算），因此我们通常需要借助 variational inference 的技巧，即采用 $$q_\phi(z\vert x)$$ 来近似真实后验，此时可以推出模型似然有一个下界：
 
@@ -49,7 +49,7 @@ $$
 
 反观 GAN 和 normalizing flow，都是只需要一个 “生成器”，先采样高斯噪声，然后用 “生成器” 把这个高斯噪声映射到数据分布就完事了。而且大多数情况下我们只关心生成图像（也就是模型的边缘分布 $$p_\theta(x)$$），并不关心这个后验分布到底是啥。但是 GAN 和 normalizing flow 也有其他缺陷，比如 GAN 还需要额外训练判别器，这导致训练很困难；而 normalizing flow 需要模型是可逆函数，不能随便用一个图像分类或分割领域的 SOTA 神经网络，这也导致模型表达能力受限。**那么，是否存在一种生成模型，训练目标函数简单，只需要训练 “生成器”，不需要训练其他网络（判别器/后验分布等），并且这个 “生成器” 没有特殊限制，可以随便选择表达能力极强的神经网络？答案就是 diffusion model。**
 
-Diffusion model 最初提出是 2015 年的 [Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585)，这篇文章写作上跟目前 diffusion model 非常不一样，偏理论且效果较差，不建议新手读。真正把 diffusion model 发扬光大的工作是2020 年提出的 [DDPM](https://arxiv.org/abs/1503.03585)，这篇文章对之前的理论推导做了一定的简化，实现了非常好、甚至超越 GAN 的效果，同时，文章也包含许多实现上的细节。抛开这些实现细节，站在 2022 年回看，我们可以揣测出 2015 年原作者提出这种模型的初衷。以下内容是我个人的理解。
+Diffusion model 最初提出是 2015 年的 [Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585)，这篇文章写作上跟目前 diffusion model 非常不一样，偏理论且效果较差，不建议新手读。真正把 diffusion model 发扬光大的工作是 2020 年提出的 [DDPM](https://arxiv.org/abs/1503.03585)，这篇文章对之前的理论推导做了一定的简化，实现了非常好、甚至超越 GAN 的效果，同时，文章也包含许多实现上的细节。抛开这些实现细节，站在 2022 年回看，我们可以揣测出 2015 年原作者提出这种模型的初衷。以下内容是我个人的理解。
 
 回想 VAE，最大的难题是变分后验很讨厌，这是因为我们首先定义了 “生成器”（条件分布 $$p_{\theta(x\vert z)}$$），然后才定义了变分后验来适配这个生成器。那能不能反过来呢？我们能否先定义一个简单的 “变分后验”（加引号是因为这里是不准确的描述），再定义 “生成器” 去适配它呢？如果可以做到，我们就可以避免优化 “变分后验”，而是直接优化生成器！回忆一下，“生成器” 想要做的是把标准高斯分布映射到数据分布，那么反过来，“变分后验” 其实就是想要把数据分布映射到标准高斯。换句话说，我们能否先定义某种简单的过程，把数据分布映射到标准高斯？这样一来，我们的生成器只需要去拟合这个过程对应的逆过程即可！
 
