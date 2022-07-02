@@ -36,9 +36,14 @@ h6 {
   line-height: normal;
 }
 
+// a {
+//   color: $blue;
+//   text-decoration: none;
+// }
+
 a {
-  color: $blue;
-  text-decoration: none;
+  color: #555;
+  text-decoration:underline;
 }
 
 blockquote {
@@ -80,9 +85,4 @@ td {
   a:hover {
     color: #4a9ae1;
   }
-}
-
-a {
-  color: #555;
-  text-decoration:underline;
 }
