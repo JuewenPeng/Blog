@@ -3,7 +3,7 @@ layout: post
 title: "Cold Diffusion: Inverting Arbitrary Image Transforms Without Noise"
 author: "Juewen Peng"
 comments: false
-tags: [Diffusion Model, Deblurring, Inpainting, Super Resolution, Snowification]
+tags: [Diffusion Model, Generative Model]
 excerpt_separator: <!--more-->
 sticky: false
 hidden: false
